@@ -32,18 +32,49 @@ public class MainController {
         emailTextField.setText(contact.getEmail());
         phoneTextField.setText(contact.getPhone());
     }
+    @FXML
+    private void onEditConfirm() {
+        Contact selectedContact = contactsListView.getSelectionModel().getSelectedItem();
+        if (selectedContact != null) {
+            selectedContact.setFirstName(firstNameTextField.getText());
+            selectedContact.setLastName(lastNameTextField.getText());
+            selectedContact.setEmail(emailTextField.getText());
+            selectedContact.setPhone(phoneTextField.getText());
+            contactDAO.updateContact(selectedContact);
+            syncContacts();
+        }
+    }
+    @FXML
+    private void onDelete() {
+        Contact selectedContact = contactsListView.getSelectionModel().getSelectedItem();
+        if (selectedContact != null) {
+            contactDAO.deleteContact(selectedContact);
+            syncContacts();
+        }
+    }
+    @FXML
+    private void onAdd() {
+        final String DEFAULT_FIRST_NAME = "New";
+        final String DEFAULT_LAST_NAME = "Contact";
+        final String DEFAULT_EMAIL = "";
+        final String DEFAULT_PHONE = "";
+        Contact newContact = new Contact(DEFAULT_FIRST_NAME, DEFAULT_LAST_NAME, DEFAULT_EMAIL, DEFAULT_PHONE);
+        contactDAO.addContact(newContact);
+        syncContacts();
+        selectContact(newContact);
+        firstNameTextField.requestFocus();
+    }
+    @FXML
+    private void onCancel() {
+        Contact selectedContact = contactsListView.getSelectionModel().getSelectedItem();
+        if (selectedContact != null) {
+            selectContact(selectedContact);
+        }
+    }
 
-    /**
-     * Renders a cell in the contacts list view by setting the text to the contact's full name.
-     * @param contactListView The list view to render the cell for.
-     * @return The rendered cell.
-     */
     private ListCell<Contact> renderCell(ListView<Contact> contactListView) {
         return new ListCell<>() {
-            /**
-             * Handles the event when a contact is selected in the list view.
-             * @param mouseEvent The event to handle.
-             */
+
             private void onContactSelected(MouseEvent mouseEvent) {
                 ListCell<Contact> clickedCell = (ListCell<Contact>) mouseEvent.getSource();
                 // Get the selected contact from the list view
