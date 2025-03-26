@@ -1,4 +1,4 @@
-﻿package com.example.demoagain;
+package com.example.demoagain;
 
 public class Contact {
     private int id;
@@ -54,7 +54,7 @@ public class Contact {
         this.phone = phone;
     }
 
-    public String getFullName() {
-        return firstName + " " + lastName;
+    public String getContactSummary() {
+        return firstName + " " + lastName + " (" + email + ")";
     }
 }
